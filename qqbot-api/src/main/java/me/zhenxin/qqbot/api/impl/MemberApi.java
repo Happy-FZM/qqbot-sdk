@@ -24,7 +24,9 @@ import me.zhenxin.qqbot.entity.AccessInfo;
 import me.zhenxin.qqbot.entity.Member;
 import me.zhenxin.qqbot.exception.ApiException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 成员相关接口
@@ -104,10 +106,15 @@ public class MemberApi extends BaseApi {
     /**
      * 删除频道成员 (仅私域可用)
      *
-     * @param guildId 频道ID
-     * @param userId  用户ID
+     * @param guildId              频道ID
+     * @param userId               用户ID
+     * @param addBlacklist         删除成员的同时，将该用户添加到频道黑名单中
+     * @param deleteHistoryMsgDays 删除成员的同时，撤回该成员的消息，可以指定撤回消息的时间范围
      */
-    public void deleteMember(String guildId, String userId) throws ApiException {
-        delete("/guilds/" + guildId + "/members/" + userId, null);
+    public void deleteMember(String guildId, String userId, Boolean addBlacklist, int deleteHistoryMsgDays) throws ApiException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("add_blacklist", addBlacklist);
+        data.put("delete_history_msg_days", deleteHistoryMsgDays);
+        delete("/guilds/" + guildId + "/members/" + userId, data);
     }
 }
